@@ -1,0 +1,38 @@
+<!doctype html><html lang="en"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Token Inspector — Vulnerable Lab</title><link rel="stylesheet" href="../styles.css">
+</head><body><main class="app">
+  <a class="back" href="../index.html">← All labs</a><section class="panel">
+    <h1>Session token inspector</h1>
+    <p class="hint"><strong>Deliberate JWT bypass:</strong> the payload controls authorization and no signature is verified.</p>
+    <label for="token">JWT</label><textarea id="token" rows="5"></textarea>
+    <button id="inspect">Inspect and sign in</button> <button id="forge">Forge admin token</button>
+    <div id="result" class="output">No token inspected.</div>
+  </section>
+</main><script>
+  const tokenField = document.querySelector('#token');
+  function encode(value) {
+    return btoa(JSON.stringify(value)).replaceAll('+','-').replaceAll('/','_').replace(/=+$/,'');
+  }
+  function makeUnsignedToken(role) {
+    return `${encode({ alg: 'none', typ: 'JWT' })}.${encode({ sub: 'student', role })}.`;
+  }
+  function decodePart(value) {
+    const base64 = value.replaceAll('-','+').replaceAll('_','/').padEnd(Math.ceil(value.length / 4) * 4,'=');
+    return JSON.parse(atob(base64));
+  }
+  tokenField.value = makeUnsignedToken('guest');
+  document.querySelector('#forge').addEventListener('click', () => { tokenField.value = makeUnsignedToken('admin'); });
+  document.querySelector('#inspect').addEventListener('click', () => {
+    try {
+      const parts = tokenField.value.split('.');
+      // VULNERABILITY: the payload is decoded but the header and signature are never verified.
+      const payload = decodePart(parts[1]);
+      document.querySelector('#result').textContent = payload.role === 'admin'
+        ? `Welcome administrator ${payload.sub}. Secret: FAKE-ADMIN-REPORT`
+        : `Welcome ${payload.sub}. Role: ${payload.role}`;
+    } catch (error) {
+      document.querySelector('#result').textContent = `Invalid token: ${error.message}`;
+    }
+  });
+</script></body></html>

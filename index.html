@@ -35,6 +35,22 @@
       <span class="number">05</span><h2>Message Center</h2>
       <p>Cross-window messages are trusted without checking their origin.</p><span class="tag">Unsafe postMessage</span>
     </a>
+    <a class="card" href="apps/unsafe-eval.html">
+      <span class="number">06</span><h2>Quick Calculator</h2>
+      <p>Calculator input is executed directly as JavaScript code.</p><span class="tag">Code injection</span>
+    </a>
+    <a class="card" href="apps/prototype-pollution.html">
+      <span class="number">07</span><h2>Config Importer</h2>
+      <p>Untrusted properties can replace an object's prototype.</p><span class="tag">Prototype pollution</span>
+    </a>
+    <a class="card" href="apps/unsigned-token.html">
+      <span class="number">08</span><h2>Token Inspector</h2>
+      <p>Authorization trusts a JWT payload without verifying its signature.</p><span class="tag">JWT verification bypass</span>
+    </a>
+    <a class="card" href="apps/url-scheme.html">
+      <span class="number">09</span><h2>Profile Builder</h2>
+      <p>A user-controlled URL becomes a clickable link without scheme validation.</p><span class="tag">URL scheme injection</span>
+    </a>
   </main>
   <footer>Everything here is intentionally insecure. View source and experiment locally.</footer>
 </body>

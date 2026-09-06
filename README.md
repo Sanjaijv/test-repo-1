@@ -30,6 +30,10 @@ reliable through the local server.
 | Redirector | Unvalidated client-side redirect | Use `?next=https://example.com` |
 | Preferences | Sensitive information stored in `localStorage` | Inspect browser storage in developer tools |
 | Message center | Origin-free `postMessage` receiver using `innerHTML` | Use the included sender page |
+| Calculator | JavaScript code execution through `eval` | Enter `alert('eval injection')` |
+| Config importer | Prototype pollution through `Object.assign` | Import the provided `__proto__` payload |
+| Token inspector | Unsigned JWT payload trusted for authorization | Use the **Forge admin token** button |
+| Profile builder | Dangerous URL schemes accepted in links | Use `javascript:alert(document.domain)` |
 
 ## Purpose
 
