@@ -1,0 +1,18 @@
+<!doctype html><html lang="en"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Message Sender — Vulnerable Lab</title><link rel="stylesheet" href="../styles.css">
+</head><body><main class="app">
+  <a class="back" href="message-center.html">← Message center</a><section class="panel">
+    <h1>Untrusted message sender</h1><p>Keep the message center open, then send HTML to its window.</p>
+    <label for="payload">Message payload</label>
+    <textarea id="payload" rows="4">Hello from another window. &lt;strong&gt;This HTML is trusted.&lt;/strong&gt;</textarea>
+    <button id="send">Send to opener</button><div id="status" class="output">Ready.</div>
+  </section>
+</main><script>
+  document.querySelector('#send').addEventListener('click', () => {
+    if (!window.opener) { document.querySelector('#status').textContent = 'Open this page using the button in Message Center.'; return; }
+    // VULNERABILITY: wildcard target origin sends data without restricting the receiver.
+    window.opener.postMessage(document.querySelector('#payload').value,'*');
+    document.querySelector('#status').textContent = 'Message sent.';
+  });
+</script></body></html>

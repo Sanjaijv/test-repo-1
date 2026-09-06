@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Obviously Vulnerable HTML Lab</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <p class="eyebrow">LOCAL TRAINING LAB</p>
+    <h1>Obviously Vulnerable HTML Apps</h1>
+    <p>Small, intentionally broken applications for learning and security-tool testing.</p>
+    <div class="warning"><strong>Do not deploy.</strong> Run only on <code>127.0.0.1</code>.</div>
+  </header>
+
+  <main class="grid">
+    <a class="card" href="apps/dom-xss.html">
+      <span class="number">01</span><h2>Unsafe Search</h2>
+      <p>User input is inserted into the document with <code>innerHTML</code>.</p><span class="tag">DOM XSS</span>
+    </a>
+    <a class="card" href="apps/client-auth.html">
+      <span class="number">02</span><h2>Admin Portal</h2>
+      <p>Credentials and authorization logic live entirely in the browser.</p><span class="tag">Broken access control</span>
+    </a>
+    <a class="card" href="apps/open-redirect.html">
+      <span class="number">03</span><h2>Link Redirector</h2>
+      <p>An attacker-controlled URL is assigned directly to <code>location</code>.</p><span class="tag">Open redirect</span>
+    </a>
+    <a class="card" href="apps/insecure-storage.html">
+      <span class="number">04</span><h2>Preferences Vault</h2>
+      <p>Fake secrets are persisted in readable browser storage.</p><span class="tag">Sensitive data exposure</span>
+    </a>
+    <a class="card" href="apps/message-center.html">
+      <span class="number">05</span><h2>Message Center</h2>
+      <p>Cross-window messages are trusted without checking their origin.</p><span class="tag">Unsafe postMessage</span>
+    </a>
+  </main>
+  <footer>Everything here is intentionally insecure. View source and experiment locally.</footer>
+</body>
+</html>

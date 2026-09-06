@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Unsafe Search — Vulnerable Lab</title><link rel="stylesheet" href="../styles.css">
+</head><body><main class="app">
+  <a class="back" href="../index.html">← All labs</a><section class="panel">
+    <h1>Product search</h1>
+    <p class="hint"><strong>Deliberate DOM XSS:</strong> the query is copied into <code>innerHTML</code> without sanitization.</p>
+    <form id="search-form"><label for="query">Search term</label>
+      <input id="query" name="q" autocomplete="off" placeholder="Try: blue widgets"><button>Search</button>
+    </form><div id="results" class="output">No search yet.</div>
+  </section>
+</main><script>
+  const form = document.querySelector('#search-form');
+  const query = document.querySelector('#query');
+  const results = document.querySelector('#results');
+  const initialQuery = new URLSearchParams(location.search).get('q');
+  if (initialQuery) { query.value = initialQuery; showResults(initialQuery); }
+  form.addEventListener('submit', (event) => { event.preventDefault(); showResults(query.value); });
+  function showResults(value) {
+    // VULNERABILITY: attacker-controlled HTML is executed by the browser.
+    results.innerHTML = `No products found for <strong>${value}</strong>`;
+  }
+</script></body></html>
