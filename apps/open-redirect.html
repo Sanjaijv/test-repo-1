@@ -1,0 +1,18 @@
+<!doctype html><html lang="en"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Link Redirector — Vulnerable Lab</title><link rel="stylesheet" href="../styles.css">
+</head><body><main class="app">
+  <a class="back" href="../index.html">← All labs</a><section class="panel">
+    <h1>Trusted link redirector</h1>
+    <p class="hint"><strong>Deliberate open redirect:</strong> any URL in <code>?next=</code> is trusted.</p>
+    <p>This page pretends to send users to another trusted area after a short confirmation.</p>
+    <div id="destination" class="output">No destination supplied.</div><button id="continue" disabled>Continue</button>
+  </section>
+</main><script>
+  const next = new URLSearchParams(location.search).get('next'); const button = document.querySelector('#continue');
+  if (next) {
+    document.querySelector('#destination').textContent = `Destination: ${next}`; button.disabled = false;
+    // VULNERABILITY: no same-origin or allow-list validation.
+    button.addEventListener('click', () => { window.location.href = next; });
+  }
+</script></body></html>

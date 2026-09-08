@@ -1,0 +1,28 @@
+<!doctype html><html lang="en"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Config Importer — Vulnerable Lab</title><link rel="stylesheet" href="../styles.css">
+</head><body><main class="app">
+  <a class="back" href="../index.html">← All labs</a><section class="panel">
+    <h1>Configuration importer</h1>
+    <p class="hint"><strong>Deliberate prototype pollution:</strong> untrusted JSON is merged without blocking <code>__proto__</code>.</p>
+    <label for="config-input">Configuration JSON</label>
+    <textarea id="config-input" rows="6">{"theme":"night","__proto__":{"isAdmin":true}}</textarea>
+    <button id="import">Import configuration</button>
+    <div id="result" class="output">Current access: regular user.</div>
+  </section>
+</main><script>
+  document.querySelector('#import').addEventListener('click', () => {
+    const config = { theme: 'default' };
+    try {
+      const imported = JSON.parse(document.querySelector('#config-input').value);
+      // VULNERABILITY: assigning __proto__ changes config's prototype.
+      Object.assign(config, imported);
+      const inherited = !Object.hasOwn(config, 'isAdmin') && config.isAdmin === true;
+      document.querySelector('#result').textContent = config.isAdmin
+        ? `Admin access granted. isAdmin was inherited: ${inherited}`
+        : `Regular access. Theme: ${config.theme}`;
+    } catch (error) {
+      document.querySelector('#result').textContent = `Invalid JSON: ${error.message}`;
+    }
+  });
+</script></body></html>

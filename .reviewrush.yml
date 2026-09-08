@@ -1,0 +1,9 @@
+version: 1
+
+branches:
+  source: foundations
+  target: main
+
+auto_fix:
+  enabled: true
+  maximum_severity: low

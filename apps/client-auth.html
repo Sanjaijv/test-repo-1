@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin Portal — Vulnerable Lab</title><link rel="stylesheet" href="../styles.css">
+</head><body><main class="app">
+  <a class="back" href="../index.html">← All labs</a><section class="panel">
+    <h1>Admin portal</h1>
+    <p class="hint"><strong>Deliberate broken access control:</strong> credentials and admin state are controlled entirely by JavaScript.</p>
+    <div id="login"><label for="username">Username</label><input id="username" autocomplete="username">
+      <label for="password">Password</label><input id="password" type="password" autocomplete="current-password"><button id="sign-in">Sign in</button></div>
+    <div id="admin" hidden><h2>Administrator dashboard</h2><p>Training-only payroll export: <span class="secret">FAKE-PAYROLL-2026.csv</span></p><button id="sign-out">Sign out</button></div>
+    <div id="status" class="output">Not signed in.</div>
+  </section>
+</main><script>
+  // VULNERABILITY: secret credentials shipped to every visitor.
+  const ADMIN_USER = 'admin'; const ADMIN_PASSWORD = 'password123';
+  const login = document.querySelector('#login'); const admin = document.querySelector('#admin'); const status = document.querySelector('#status');
+  function render() {
+    // VULNERABILITY: authorization trusts browser-writable sessionStorage.
+    const authorized = sessionStorage.getItem('isAdmin') === 'true';
+    login.hidden = authorized; admin.hidden = !authorized;
+    status.textContent = authorized ? 'Access granted by client-side flag.' : 'Not signed in.';
+  }
+  document.querySelector('#sign-in').addEventListener('click', () => {
+    if (document.querySelector('#username').value === ADMIN_USER && document.querySelector('#password').value === ADMIN_PASSWORD) {
+      sessionStorage.setItem('isAdmin','true'); render();
+    } else status.textContent = 'Invalid credentials.';
+  });
+  document.querySelector('#sign-out').addEventListener('click', () => { sessionStorage.removeItem('isAdmin'); render(); });
+  render();
+</script></body></html>

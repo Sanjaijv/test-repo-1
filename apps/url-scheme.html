@@ -1,0 +1,24 @@
+<!doctype html><html lang="en"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Profile Builder — Vulnerable Lab</title><link rel="stylesheet" href="../styles.css">
+</head><body><main class="app">
+  <a class="back" href="../index.html">← All labs</a><section class="panel">
+    <h1>Public profile builder</h1>
+    <p class="hint"><strong>Deliberate URL-scheme injection:</strong> the homepage URL is used without allowing only <code>http:</code> and <code>https:</code>.</p>
+    <label for="name">Display name</label><input id="name" value="Security Student">
+    <label for="homepage">Homepage URL</label><input id="homepage" value="javascript:alert(document.domain)" autocomplete="off">
+    <button id="preview">Build preview</button>
+    <div id="result" class="output">No preview yet.</div>
+  </section>
+</main><script>
+  document.querySelector('#preview').addEventListener('click', () => {
+    const name = document.querySelector('#name').value;
+    const homepage = document.querySelector('#homepage').value;
+    const link = document.createElement('a');
+    link.textContent = `${name}'s homepage`;
+    // VULNERABILITY: dangerous schemes such as javascript: are accepted.
+    link.href = homepage;
+    const result = document.querySelector('#result');
+    result.replaceChildren(link);
+  });
+</script></body></html>

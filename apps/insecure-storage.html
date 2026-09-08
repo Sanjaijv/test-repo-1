@@ -1,0 +1,21 @@
+<!doctype html><html lang="en"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Preferences Vault — Vulnerable Lab</title><link rel="stylesheet" href="../styles.css">
+</head><body><main class="app">
+  <a class="back" href="../index.html">← All labs</a><section class="panel">
+    <h1>Preferences vault</h1>
+    <p class="hint"><strong>Deliberate sensitive-data exposure:</strong> fake credentials are stored unencrypted in <code>localStorage</code>.</p>
+    <label for="display-name">Display name</label><input id="display-name" value="Security Student">
+    <button id="save">Save preferences</button> <button id="clear">Clear browser data</button>
+    <div id="status" class="output">Open developer tools → Application/Storage → Local Storage.</div>
+  </section>
+</main><script>
+  document.querySelector('#save').addEventListener('click', () => {
+    localStorage.setItem('displayName',document.querySelector('#display-name').value);
+    // VULNERABILITY: sensitive values should never be exposed to front-end storage.
+    localStorage.setItem('apiToken','FAKE-LAB-TOKEN-7f3a9c2e');
+    localStorage.setItem('recoveryCode','FAKE-RECOVERY-1122-3344');
+    document.querySelector('#status').innerHTML = 'Saved! Inspect <code>localStorage</code> to find the fake secrets.';
+  });
+  document.querySelector('#clear').addEventListener('click', () => { localStorage.clear(); document.querySelector('#status').textContent = 'Local storage cleared.'; });
+</script></body></html>

@@ -1,0 +1,24 @@
+<!doctype html><html lang="en"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Quick Calculator — Vulnerable Lab</title><link rel="stylesheet" href="../styles.css">
+</head><body><main class="app">
+  <a class="back" href="../index.html">← All labs</a><section class="panel">
+    <h1>Quick calculator</h1>
+    <p class="hint"><strong>Deliberate code injection:</strong> calculator input is passed directly to <code>eval()</code>.</p>
+    <label for="expression">Expression</label>
+    <input id="expression" value="(12 * 4) + 2" autocomplete="off">
+    <button id="calculate">Calculate</button>
+    <div id="result" class="output">Enter an expression.</div>
+  </section>
+</main><script>
+  document.querySelector('#calculate').addEventListener('click', () => {
+    const expression = document.querySelector('#expression').value;
+    try {
+      // VULNERABILITY: arbitrary input is executed in the page's JavaScript context.
+      const answer = eval(expression);
+      document.querySelector('#result').textContent = `Result: ${answer}`;
+    } catch (error) {
+      document.querySelector('#result').textContent = `Error: ${error.message}`;
+    }
+  });
+</script></body></html>
